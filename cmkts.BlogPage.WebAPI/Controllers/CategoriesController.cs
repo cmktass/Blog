@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
-using cmkts.BlogPage.DataAccess.Concrete.EFrameworkCore.BlogPageContext;
-using cmkts.BlogPage.DataAccess.Concrete.EFrameworkCore.Dal;
-using cmkts.BlogPage.DataAccess.Interface;
 using cmkts.BlogPage.Entity.Entities;
-using cmkts.BlogPage.Service.Concrete;
 using cmkts.BlogPage.Service.Interface;
 using cmkts.BlogPage.WebAPI.DTO;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace cmkts.BlogPage.WebAPI.Controllers
@@ -21,16 +15,79 @@ namespace cmkts.BlogPage.WebAPI.Controllers
     {
 
 
-        private ICategoryDal categoryDal;
-        public CategoriesController(ICategoryDal categoryDal)
+        private ICategoryManager categoryManager;
+        private IMapper mapper;
+        public CategoriesController(ICategoryManager categoryManager,IMapper mapper)
         {
-            this.categoryDal = categoryDal;
+            this.mapper = mapper;
+            this.categoryManager = categoryManager;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
-            return Ok(await categoryDal.GetByIdAsync(1));
+
             
+            List<CategoryWithPostCount> categoryWithPostCounts = new List<CategoryWithPostCount>();
+            var categories = await categoryManager.GetAllCategoryWithPostCount();
+            foreach (var item in categories)
+            {
+                CategoryWithPostCount categoryWithPostCount = new CategoryWithPostCount();
+                categoryWithPostCount.Id = item.Id;
+                categoryWithPostCount.Name = item.Name;
+                categoryWithPostCount.Count = item.PostCategories.Count;
+                categoryWithPostCounts.Add(categoryWithPostCount);
+            }
+            return Ok(categoryWithPostCounts);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCategoryById(int id)
+        {
+            return Ok(mapper.Map<CategoryDto>(await categoryManager.GetByIdAsync(id)));
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateCategory(CategoryDto categoryDto)
+        {
+            await categoryManager.AddAsync(mapper.Map<Category>(categoryDto));
+            return Created("", categoryDto);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> ChangeCategoryName(string name,string newName)
+        {
+            Category user= await categoryManager.GetCategoryByName(name);
+            if (user == null)
+            {
+                return BadRequest("Gönderilen isimli kategori bulunamadı");
+            }
+            else
+            {
+                if (newName != null)
+                {
+                    user.Name = newName;
+                    await categoryManager.UpdateAsync(user);
+                }
+                return NoContent();
+                    
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteCategoryAsync(int id)
+        {
+            var cat=await categoryManager.GetByIdAsync(id);
+            if(cat != null)
+            {
+                await categoryManager.RemoveAsync(cat);
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("Aranan id bulunamadı");
+            }
         }
     }
 }

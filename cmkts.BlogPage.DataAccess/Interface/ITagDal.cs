@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace cmkts.BlogPage.DataAccess.Interface
 {
-    public interface IUserDal:IGenericDal<User>
+    public interface ITagDal:IGenericDal<Tag>
     {
-        Task<User> CheckUserAsync(User user);
+
     }
 }

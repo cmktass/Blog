@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace cmkts.BlogPage.Service.Interface
 {
-    public interface IUserManager:IGenericManager<User>
+    public interface ITagManager:IGenericManager<Tag>
     {
-        Task<User> CheckUserAsync(User user);
+
     }
 }

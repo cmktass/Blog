@@ -12,13 +12,7 @@ namespace cmkts.BlogPage.WebAPI.DTO
 
         public string Surname { get; set; }
 
-        public DateTime BirthDate { get; set; }
-
-        public string ImagePath { get; set; }
-
         public string Job { get; set; }
-
-        public string Email { get; set; }
 
         public string Github { get; set; }
 

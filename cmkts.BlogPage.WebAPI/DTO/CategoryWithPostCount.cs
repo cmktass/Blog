@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 namespace cmkts.BlogPage.WebAPI.DTO
 {
-    public class CategoryDto
+    public class CategoryWithPostCount
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
+
+        public int Count { get; set; }
     }
 }

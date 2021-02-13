@@ -4,6 +4,7 @@ using cmkts.BlogPage.Service.Interface;
 using cmkts.BlogPage.WebAPI.DTO;
 using cmkts.BlogPage.WebAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace cmkts.BlogPage.WebAPI.Controllers
@@ -48,7 +49,21 @@ namespace cmkts.BlogPage.WebAPI.Controllers
             {
                 return BadRequest(uploadModel.ErrorMessage);
             }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> UserImageAsync(int id)
+        {
+           var user = await userManager.GetByIdAsync(id);
             
+            if (!string.IsNullOrEmpty(user.ImagePath))
+            {
+               return File($"/{user.ImagePath}","image/jpeg");
+            }
+            else
+            {
+                return BadRequest("");
+            }
         }
     }
 }

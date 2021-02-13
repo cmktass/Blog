@@ -14,6 +14,8 @@ namespace cmkts.BlogPage.WebAPI.Mapping
         {
             CreateMap<User, UserInfoDto>();
             CreateMap<UserInfoDto, User>();
+            CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
         }
     }
 }
