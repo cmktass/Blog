@@ -13,7 +13,7 @@ namespace cmkts.BlogPage.DataAccess.Concrete.EFrameworkCore.DatabaseConfiguratio
         {
             builder.HasKey(i => i.Id);
 
-            builder.Property(i => i.Description).IsRequired().HasColumnType("varchar");
+            builder.Property(i => i.Description).IsRequired();
 
             builder.Property(i => i.PostedDate).IsRequired();
 

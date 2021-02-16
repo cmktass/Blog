@@ -3,6 +3,7 @@ using cmkts.BlogPage.Entity.Entities;
 using cmkts.BlogPage.Service.Interface;
 using cmkts.BlogPage.WebAPI.DTO;
 using cmkts.BlogPage.WebAPI.JwtTools;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -39,6 +40,7 @@ namespace cmkts.BlogPage.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult ActiveUser()
         {
             UserDto userDto = new UserDto();

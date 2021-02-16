@@ -27,7 +27,10 @@ namespace cmkts.BlogPage.Service.IoC
 
             service.AddScoped<ITagDal, TagDal>();
             service.AddScoped<ITagManager, TagManager>();
-            
+
+            service.AddScoped<IPostDal, PostDal>();
+            service.AddScoped<IPostManager, PostManager>();
+
         }
     }
 }
